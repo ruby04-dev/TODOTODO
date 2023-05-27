@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'todos',
 
     'rest_framework',
+    'django_extensions',
 
     'django.contrib.admin',
     'django.contrib.auth',

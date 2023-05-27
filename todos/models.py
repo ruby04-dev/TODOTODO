@@ -12,7 +12,7 @@ class Todo(models.Model):
         COMPLETED = "3", _("Completed"),
 
     content = models.CharField(_(""), max_length=255)
-    due_date = models.DateTimeField(blank=True)
+    due_date = models.DateTimeField(null=True, blank=True)
     status = models.CharField(
         max_length=4,
         choices=Status.choices,

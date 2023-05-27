@@ -10,6 +10,10 @@ User와 TODO를 CRUD 하는 앱을 만들어 본다.
 [x] django project 생성
 [x] accounts, todos 앱 생성
 
+`Sat May 27 14:16:13 2023 +0900`
+
+[x] Todo 모델 추가
+
 ## 개발 단계
 
 ### API
