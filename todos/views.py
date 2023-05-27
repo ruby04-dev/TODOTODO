@@ -5,6 +5,8 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from .serializers import *
 from django.http import Http404
+from rest_framework import mixins
+from rest_framework import generics
 
 
 """
@@ -45,69 +47,56 @@ def hello_rest_api(request):
     return Response(data)
 
 
-# @api_view(['GET', 'POST'])
-# def todo_list(request):
-#     """
-#     List all todos, or create a new todo.
-#     """
-#     if request.method == 'GET':
-#         todos = Todo.objects.all()
-#         serializer = TodoSerializer(todos, many=True)
-#         return JsonResponse(serializer.data)
+class TodoList(generics.ListCreateAPIView):
+    queryset = Todo.objects.all()
+    serializer_class = TodoSerializer
 
-#     elif request.method == 'POST':
-#         data = JSONParser().parse(request)
-#         serializer = TodoSerializer(data=request.data)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return JsonResponse(serializer.data, status=status.HTTP_201_CREATED)
-#         return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class TodoDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Todo.objects.all()
+    serializer_class = TodoSerializer
+
 
 @permission_classes([AllowAny])
-class TodoList(APIView):
+class TodoList(mixins.ListModelMixin,
+               mixins.CreateModelMixin,
+               generics.GenericAPIView):
     """
     List all Todos, or create a new Todo.
+
+    The base class provides the core functionality,
+    the mixin classes provide the .list() and .create() actions.
     """
+    queryset = Todo.objects.all()
+    serializer_class = TodoSerializer
 
-    def get(self, request, format=None):
-        todos = Todo.objects.all()
-        serializer = TodoSerializer(todos, many=True)
-        return Response(serializer.data)
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
 
-    def post(self, request, format=None):
-        serializer = TodoSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
 
 
 @permission_classes([AllowAny])
-class TodoDetail(APIView):
+class TodoDetail(mixins.RetrieveModelMixin,
+                 mixins.UpdateModelMixin,
+                 mixins.DestroyModelMixin,
+                 generics.GenericAPIView):
+
     """
-    Retrieve, update or delete a todo instance.
+    Retrieve, update or delete a todo.
+
+    the GenericAPIView class provide the core functionality, 
+    mixins provide the .retrieve(), .update() and .destroy()
     """
+    queryset = Todo.objects.all()
+    serializer_class = TodoSerializer
 
-    def get_object(self, pk):
-        try:
-            return Todo.objects.get(pk=pk)
-        except Todo.DoesNotExist:
-            raise Http404
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
 
-    def get(self, request, pk, format=None):
-        Todo = self.get_object(pk)
-        serializer = TodoSerializer(Todo)
-        return Response(serializer.data)
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
 
-    def put(self, request, pk, format=None):
-        Todo = self.get_object(pk)
-        serializer = TodoSerializer(Todo, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    def delete(self, request, pk, format=None):
-        Todo = self.get_object(pk)
-        Todo.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)
