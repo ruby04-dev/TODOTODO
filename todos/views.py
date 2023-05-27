@@ -56,8 +56,8 @@ def api_root(request, format=None):
     return Response({
         # use REST framework's reverse function in order to return fully-qualified URLs
         # URL patterns are identified by convenience names, declared in ./urls.py
-        'users': reverse('user-list', request=request, format=format),
-        'todos': reverse('todo-list', request=request, format=format)
+        'users': reverse('users:user-list', request=request, format=format),
+        'todos': reverse('todos:todo-list', request=request, format=format)
     })
 
 
