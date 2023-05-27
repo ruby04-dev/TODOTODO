@@ -15,12 +15,17 @@ Including another URLconf
 """
 from rest_framework.urlpatterns import format_suffix_patterns
 from django.urls import path, include
-from todos.views import hello_rest_api
+from todos.views import hello_rest_api, api_root
 from django.contrib import admin
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/hello/', hello_rest_api, name='hello_rest_api'),
+    path('', api_root),
     path('todos/', include('todos.urls')),
     path('users/', include('users.urls')),
+]
+# add login
+urlpatterns += [
+    path('api-auth/', include('rest_framework.urls')),
 ]

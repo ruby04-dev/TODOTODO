@@ -1,6 +1,4 @@
 from django.db import models
-from pygments.lexers import get_lexer_by_name
-from pygments.formatters.html import HtmlFormatter
 from django.utils.translation import gettext_lazy as _
 
 
@@ -28,3 +26,11 @@ class Todo(models.Model):
         null=True,
         blank=True,
     )
+    highlighted = models.TextField()
+
+    def save(self, *args, **kwargs):
+        """
+        컨텐츠를 highlight 하여 pre-rendered HTML 로 저장
+        """
+        self.highlighted = f'<p style="color:blue;">{self.content}</p>'
+        super().save(*args, **kwargs)

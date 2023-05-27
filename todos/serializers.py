@@ -4,6 +4,7 @@ from django.utils.translation import gettext_lazy as _
 
 
 class TodoSerializer(serializers.ModelSerializer):
+    # The source argument controls which attribute is used to populate a field
     owner = serializers.ReadOnlyField(source='owner.username')
 
     class Meta:
