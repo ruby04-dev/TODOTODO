@@ -4,6 +4,8 @@ from rest_framework.response import Response
 from .models import Todo
 from .serializers import TodoSerializer
 from .permissions import IsOwnerOrReadOnly
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework import mixins, generics, permissions, renderers, status
 
 
@@ -75,17 +77,31 @@ and create our own .get() method
 """
 
 
-class TodoHighlight(mixins.ListModelMixin, generics.GenericAPIView):
+class TodoHighlight(generics.GenericAPIView):
     queryset = Todo.objects.all()
-    serializer_class = TodoSerializer
-    renderer_classes = [renderers.StaticHTMLRenderer]
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    renderer_classes = [renderers.StaticHTMLRenderer]
+
+    def get(self, request, *args, **kwargs):
+        todo = self.get_object()
+        return Response(todo.highlighted)
+
+
+class TodoListHighlight(mixins.ListModelMixin, generics.GenericAPIView):
+    queryset = Todo.objects.all()
+    renderer_classes = [renderers.StaticHTMLRenderer]
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
 
     def get(self, request, *args, **kwargs):
         todos = self.get_queryset()
-        rendered_html = '\n'.join(
-            [todo.highlighted for todo in todos])
-        return Response(rendered_html)
+        content = {
+            'user': str(request.user),
+            'auth': str(request.auth),
+            'body': '\n'.join(
+                [todo.highlighted for todo in todos]),
+        }
+        return Response(content.get('body'))
 
 # @permission_classes([AllowAny])
 # class TodoList(generics.ListCreateAPIView):

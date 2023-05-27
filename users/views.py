@@ -1,6 +1,6 @@
 
 from rest_framework.decorators import api_view, permission_classes
-from .serializers import *
+from .serializers import UserSerializer
 from rest_framework import generics
 from rest_framework.permissions import AllowAny
 from django.contrib.auth.models import User
@@ -17,4 +17,5 @@ class UserList(generics.ListAPIView):
 @permission_classes([AllowAny])
 class UserDetail(generics.RetrieveAPIView):
     queryset = User.objects.all()
+    lookup_field = 'pk'
     serializer_class = UserSerializer

@@ -1,13 +1,13 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
-from todos.models import *
 from django.utils.translation import gettext_lazy as _
 
 
-class UserSerializer(serializers.ModelSerializer):
-    todos = serializers.PrimaryKeyRelatedField(
-        many=True, queryset=Todo.objects.all())
+class UserSerializer(serializers.HyperlinkedModelSerializer):
+    todos = serializers.HyperlinkedRelatedField(
+        many=True, view_name='todos:todo-detail', read_only=True)
 
     class Meta:
         model = User
-        fields = ['id', 'username', 'todos']
+        fields = ['url', 'id', 'username', 'todos']
+        extra_kwargs = {'url': {'view_name': 'users:user-detail'}}

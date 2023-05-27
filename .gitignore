@@ -1,5 +1,5 @@
-# Created by https://www.toptal.com/developers/gitignore/api/react,nextjs,django,python,venv,visualstudiocode,node,macos,windows,linux
-# Edit at https://www.toptal.com/developers/gitignore?templates=react,nextjs,django,python,venv,visualstudiocode,node,macos,windows,linux
+# Created by https://www.toptal.com/developers/gitignore/api/react,django,macos,windows,linux,visualstudiocode,node,nextjs,python
+# Edit at https://www.toptal.com/developers/gitignore?templates=react,django,macos,windows,linux,visualstudiocode,node,nextjs,python
 
 ### Django ###
 *.log
@@ -491,18 +491,6 @@ psd
 thumb
 sketch
 
-### venv ###
-# Virtualenv
-# http://iamzed.com/2009/05/07/a-primer-on-virtualenv/
-[Bb]in
-[Ii]nclude
-[Ll]ib
-[Ll]ib64
-[Ll]ocal
-[Ss]cripts
-pyvenv.cfg
-pip-selfcheck.json
-
 ### VisualStudioCode ###
 .vscode/*
 !.vscode/settings.json
@@ -548,4 +536,4 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
-# End of https://www.toptal.com/developers/gitignore/api/react,nextjs,django,python,venv,visualstudiocode,node,macos,windows,linux
+# End of https://www.toptal.com/developers/gitignore/api/react,django,macos,windows,linux,visualstudiocode,node,nextjs,python

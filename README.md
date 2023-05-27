@@ -13,6 +13,14 @@ User와 TODO를 CRUD 하는 앱을 만들어 본다.
 [x] Todo 모델 추가
 [x] TodoSerializer 추가
 
+[x] Todo CRUD 구현
+[x] API endpoint 설계
+
+`Sun May 28`
+
+[x] API view 에 hyperlinked url 추가
+[x] todos 앱에 pre-rendered-htrml reponse 뷰 추가
+
 ## 개발 단계
 
 ### API

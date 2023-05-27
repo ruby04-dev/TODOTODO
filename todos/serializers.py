@@ -3,13 +3,34 @@ from .models import *
 from django.utils.translation import gettext_lazy as _
 
 
-class TodoSerializer(serializers.ModelSerializer):
+"""
+HyperlinkedModelSerializer has the following differences from ModelSerializer:
+
+It does not include the id field by default.
+It includes a url field, using HyperlinkedIdentityField.
+-> 'url', 'id' 를 Meta 클래스의 fields 리스트에 추가해야함
+
+Relationships use HyperlinkedRelatedField, instead of PrimaryKeyRelatedField.
+
+Because we've included format suffixed URLs such as '.json', 
+we also need to indicate on the highlight field 
+that any format suffixed hyperlinks it returns should use the '.html' suffix.
+"""
+
+
+class TodoSerializer(serializers.HyperlinkedModelSerializer):
+
     # The source argument controls which attribute is used to populate a field
     owner = serializers.ReadOnlyField(source='owner.username')
+    highlight = serializers.HyperlinkedIdentityField(
+        view_name='todos:todo-highlight', format='html')
 
     class Meta:
         model = Todo
-        fields = ['content', 'due_date', 'status', 'owner',]
+        fields = ['url', 'id', 'highlight',
+                  'content', 'due_date', 'status', 'owner',]
+        extra_kwargs = {'url': {'view_name': 'todos:todo-detail'}}
+
     """
     An automatically determined set of fields.
     Simple default implementations for the create() and update() methods.
