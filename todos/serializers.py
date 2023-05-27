@@ -3,30 +3,20 @@ from .models import *
 from django.utils.translation import gettext_lazy as _
 
 
-class TodoSerializer(serializers.Serializer):
-    content = serializers.CharField(max_length=255)
-    due_date = serializers.DateTimeField(allow_null=True, required=False)
-    # status = serializers.CharField(
-    #     max_length=4,
-    #     choices=Todo.Status.choices,
-    #     default=Todo.Status.TODO,
-    # )
+class TodoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Todo
+        fields = '__all__'
+    """
+    An automatically determined set of fields.
+    Simple default implementations for the create() and update() methods.
 
-    def create(self, validated_data):
-        """
-        Create and return a new `Todo` instance, given the validated data.
-        """
-        return Todo.objects.create(**validated_data)
-
-    def update(self, instance, validated_data):
-        """
-        Update and return an existing `Todo` instance, given the validated data.
-        """
-        instance.content = validated_data.get('content', instance.content)
-        instance.due_date = validated_data.get('due_date', instance.due_date)
-        # instance.status = validated_data.get('status', instance.status)
-        instance.save()
-        return instance
+    # TodoSerializer():
+    # id = IntegerField(label='ID', read_only=True)
+    # content = CharField(max_length=255)
+    # due_date = DateTimeField(allow_null=True, required=False)
+    # status = ChoiceField(choices=[('None', 'Pending'), ('1', 'To do'), ('2', 'In pregress'), ('3', 'Completed')], required=False)
+    """
 
 
 # Test Code
@@ -70,4 +60,9 @@ serializer.save()
 # serialize queryset
 serializer = TodoSerializer(Todo.objects.all(), many=True)
 serializer.data
+
+
+# inspect serializer
+serializer = TodoSerializer()
+print(repr(serializer))
 """
