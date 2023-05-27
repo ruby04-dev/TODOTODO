@@ -1,10 +1,13 @@
 from django.db import models
+from pygments.lexers import get_lexer_by_name
+from pygments.formatters.html import HtmlFormatter
 from django.utils.translation import gettext_lazy as _
 
 
 # Create your models here.
 
 class Todo(models.Model):
+
     class Status(models.TextChoices):
         PENDING = None, _("Pending"),
         TODO = "1", _("To do"),
@@ -17,4 +20,11 @@ class Todo(models.Model):
         max_length=4,
         choices=Status.choices,
         default=Status.TODO,
+    )
+    owner = models.ForeignKey(
+        'auth.User',
+        related_name='todos',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
     )
