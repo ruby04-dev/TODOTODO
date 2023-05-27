@@ -46,15 +46,15 @@ def hello_rest_api(request):
     data = {'message': 'Hello, REST API!'}
     return Response(data)
 
+# @permission_classes([AllowAny])
+# class TodoList(generics.ListCreateAPIView):
+#     queryset = Todo.objects.all()
+#     serializer_class = TodoSerializer
 
-class TodoList(generics.ListCreateAPIView):
-    queryset = Todo.objects.all()
-    serializer_class = TodoSerializer
-
-
-class TodoDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Todo.objects.all()
-    serializer_class = TodoSerializer
+# @permission_classes([AllowAny])
+# class TodoDetail(generics.RetrieveUpdateDestroyAPIView):
+#     queryset = Todo.objects.all()
+#     serializer_class = TodoSerializer
 
 
 @permission_classes([AllowAny])
@@ -71,9 +71,11 @@ class TodoList(mixins.ListModelMixin,
     serializer_class = TodoSerializer
 
     def get(self, request, *args, **kwargs):
+        print("request", request)
         return self.list(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
+        print("request", request)
         return self.create(request, *args, **kwargs)
 
 

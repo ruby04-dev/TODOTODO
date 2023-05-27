@@ -4,9 +4,11 @@ from django.utils.translation import gettext_lazy as _
 
 
 class TodoSerializer(serializers.ModelSerializer):
+    owner = serializers.ReadOnlyField(source='owner.username')
+
     class Meta:
         model = Todo
-        fields = '__all__'
+        fields = ['content', 'due_date', 'status', 'owner',]
     """
     An automatically determined set of fields.
     Simple default implementations for the create() and update() methods.
